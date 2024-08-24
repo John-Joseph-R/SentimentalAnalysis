@@ -1,0 +1,46 @@
+import pandas as pd
+import re
+from textblob import TextBlob
+import matplotlib.pyplot as plt
+
+# Load the dataset using raw string for file path
+df = pd.read_csv('path/to/your/reviews.csv')
+
+# Print the column names to find the correct one
+print(df.columns)
+
+# Define a function to clean the text
+def clean_review(text):
+    text = text.lower()  # Convert to lowercase
+    text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)  # Remove URLs
+    text = re.sub(r'\@\w+|\#', '', text)  # Remove mentions and hashtags
+    text = re.sub(r'[^A-Za-z0-9\s]', '', text)  # Remove special characters
+    return text
+
+# Replace 'review' with the actual column name
+df['Cleaned_Review'] = df['Review'].apply(clean_review)
+
+# Define a function to analyze sentiment
+def analyze_sentiment(text):
+    analysis = TextBlob(text)
+    if analysis.sentiment.polarity > 0:
+        return 'Positive'
+    elif analysis.sentiment.polarity == 0:
+        return 'Neutral'
+    else:
+        return 'Negative'
+
+# Apply sentiment analysis
+df['Sentiment'] = df['Cleaned_Review'].apply(analyze_sentiment)
+
+# Display a few rows of the dataframe
+print(df.head())
+
+# Visualize the results
+sentiment_counts = df['Sentiment'].value_counts()
+plt.figure(figsize=(10,6))
+sentiment_counts.plot(kind='bar', color=['green', 'blue', 'red'])
+plt.title('Sentiment Analysis of Amazon Product Reviews')
+plt.xlabel('Sentiment')
+plt.ylabel('Number of Reviews')
+plt.show()
