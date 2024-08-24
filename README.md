@@ -70,4 +70,5 @@ Usage
 1. Update the file path in the script to point to your CSV file containing Amazon product reviews.
 2. Run the script to perform sentiment analysis and visualize the results.
 
----
+
+THE CSV FILE IS TAKEN FROM KAGGLE AND DOESN'T BELONG TO ME. IT BELONGS TO THE RESPECTIVE OWNERS
